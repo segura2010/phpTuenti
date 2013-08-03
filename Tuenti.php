@@ -7,25 +7,36 @@ Deberas trabajar con el para mostrar los datos que necesites en tu aplicacion.
 Esto es asi para no limitar el uso de la clase y que el usuario pueda trabajar con todos los datos que
 Tuenti nos envia a traves de su API.
 
-phpTuenti version 0.0.1
+phpTuenti version 0.0.2
 by @alberto__segura
 */
 
 class Tuenti
 {
-  private $version = '0.7.1';
+	private $version = '0.7.1';
 	private $api = 'http://api.tuenti.com/api/';
 	private $loginURL = 'https://secure.tuenti.com/?m=Login&func=do_login';
 	private $sid = '';
 	private $agent = 'phpTuenti';
+	private $email = '';
+	private $password = '';
 
 	function __construct($email, $password)
+	{
+		$this->email = $email;
+		$this->password = $password;
+	}
+
+	//Antes de usar cualquier otro metodo, debemos usar este para iniciar la sesion
+	//y deberá usar el valor devuelto para saber si la conexion se realizó
+	//correctamente o no.
+	function login()
 	{
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($curl, CURLOPT_HEADER, 1);
 		curl_setopt($curl, CURLOPT_VERBOSE, 1); 
-		$cookie = 'pid=15fae6e0; __utma=81029266.1682186128.1374657561.1374657561.1374657561.1; __utmb=81029266.0.10.1374657561; __utmc=81029266; __utmz=81029266.1374657561.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)';
+		$cookie = 'pid=c0b53c24;';
 		curl_setopt($curl, CURLOPT_COOKIE, $cookie);
 		curl_setopt_array($curl, array(
     		CURLOPT_RETURNTRANSFER => 1,
@@ -33,11 +44,11 @@ class Tuenti
     		CURLOPT_USERAGENT => $this->agent,
     		CURLOPT_POST => 1,
     		CURLOPT_POSTFIELDS => array(
-    			'email' => $email,
-    			'input_password' => $password,
+    			'email' => $this->email,
+    			'input_password' => $this->password,
     			'timestamp' => '1',
     			'timezone' => '1',
-    			'csrf' => '17f4e4aa'
+    			'csfr' => '1ce77ff5'
     		)
 		));
 
@@ -51,9 +62,11 @@ class Tuenti
 		$sid = substr($sid, 0, $finSID);
 
 		$this->sid = $sid;
+		return !($inicioSID == ''); //Devolvemos true o false segun se haya logueado correctamente o no.
 	}
 
 	//Puedes seleccionar tu el SessionID que quieras.
+	//Si lo seleccionas tu no necesitaras usar el método "login()".
 	public function setSID($session)
 	{
 		$this->sid = $session;
@@ -118,6 +131,14 @@ class Tuenti
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getAlbumPhotos",{"album_id":"tagged","page":"'.$page.'","user_id":"'.$id.'","photos_per_page":"20"}]]}';
 		$resp = $this->post($data);
 		return json_decode($resp)[0]->album;
+	}
+
+	//Devuelve un array con los usuarios etiquetados en la foto.
+	public function getPhotoTags($photoID)
+	{
+		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getPhotoTags",{"photo_id":"'.$photoID.'"}]]}';
+		$resp = $this->post($data);
+		return json_decode($resp)[0];
 	}
 
 	//Envia el mensaje "message" al usuario con el id indicado. (Mensaje Privado)
@@ -253,6 +274,7 @@ class Tuenti
 		$resp = $this->post($data);
 		return json_decode($resp);
 	}
+
 }
 
 ?>
