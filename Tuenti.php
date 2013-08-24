@@ -7,7 +7,7 @@ Deberas trabajar con el para mostrar los datos que necesites en tu aplicacion.
 Esto es asi para no limitar el uso de la clase y que el usuario pueda trabajar con todos los datos que
 Tuenti nos envia a traves de su API.
 
-phpTuenti version 0.0.2
+phpTuenti version 0.0.3
 by @alberto__segura
 */
 
@@ -94,7 +94,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getUsersData",{"ids":["'.$id.'"],"fields":["name","surname","avatar","sex","status_post","phone_number","can_add_as_friend","can_send_message","favorite_books_rich","favorite_movies_rich","favorite_music_rich","favorite_quotes_rich","hobbies_rich","website","about_me_title","about_me","birthday","city","province","hometown","last_visit","visits","relationship","looking_for"]}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0]->users;
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r->users;
 	}
 
 	//Devuelve un array con todos los amigos del usuario autentificado con el SID y los datos de cada amigo.
@@ -102,7 +104,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getFriendsData",{"fields":["name","surname","sex","phone_number","avatar","status_post","birthday","city","province","hometown","last_visit","mvno_subscriber"]}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0]->friends;
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r->friends;
 	}
 
 	//Publica el estado indicado por la variable "status" al usuario autentificado con el SID.
@@ -111,7 +115,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["setUserStatus",{"body":"'.$status.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp);
+		$rp = json_decode($resp);
+		$r = $rp;
+		return $r;
 	}
 
 	//Devuelve un array con la informacion de los albums del usuario con el "id" indicado.
@@ -120,7 +126,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getUserAlbums",{"user_id":"'.$id.'","page":"'.$page.'","albums_per_page":"20"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0];
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r;
 	}
 
 	//Devulve una variable JSON con 20 fotos de la pagina indicada.
@@ -130,7 +138,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getAlbumPhotos",{"album_id":"tagged","page":"'.$page.'","user_id":"'.$id.'","photos_per_page":"20"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0]->album;
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r->album;
 	}
 
 	//Devuelve un array con los usuarios etiquetados en la foto.
@@ -138,7 +148,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getPhotoTags",{"photo_id":"'.$photoID.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0];
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r;
 	}
 
 	//Envia el mensaje "message" al usuario con el id indicado. (Mensaje Privado)
@@ -147,7 +159,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["sendMessage",{"body":"'.$message.'","recipient":"'.$id.'","legacy":"false"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp);
+		$rp = json_decode($resp);
+		$r = $rp;
+		return $r;
 	}
 
 	//Envia el mensaje "message" al usuario con el id indicado en respuesta al hilo de mensajes indicado por "thread". (Mensaje Privado)
@@ -156,7 +170,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["sendMessage",{"body":"'.$message.'","recipient":"'.$id.'","legacy":"false", "thread_key":"'.$thread.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp);
+		$rp = json_decode($resp);
+		$r = $rp;
+		return $r;
 	}
 
 	//Devuelve un array con la informacion de los 20 mensajes de la pagina indicada. BUZON DE ENTRADA
@@ -165,7 +181,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getInBox",{"page":"'.$page.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0];
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r;
 	}
 
 	//Devuelve un array con la informacion de los 20 mensajes de la pagina indicada. BUZON DE SALIDA
@@ -174,7 +192,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getSentBox",{"page":"'.$page.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0];
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r;
 	}
 
 	//Devuelve un array con la informacion de los 20 mensajes de la pagina indicada. BUZON DE DESCONOCIDOS
@@ -183,7 +203,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getSpamBox",{"page":"'.$page.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0];
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r;
 	}
 
 	#Devuelve un array con las notificaciones del usuario autentificado.
@@ -191,7 +213,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getUserNotifications",{"max_notifications":20,"types":["new_commented_status","new_friend_requests", "unread_friend_messages","unread_spam_messages","new_profile_wall_posts","new_friend_requests","accepted_friend_requests","new_photo_wall_posts","new_tagged_photos","new_event_invitations","new_group_page_invitations","group_admin_promotions","group_member_promotions","mentions_bare","like_photos","like_posts_bare"]}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0];
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r;
 	}
 
 	#Devuelve un array con los eventos proximos del usuario.
@@ -199,7 +223,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["getUpcomingEvents",{"desired_number":"20","include_friend_birthdays":"true"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0]->list;
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r->list;
 	}
 
 	#Devulve un array con los resultados de la busqueda de PERSONAS usando la palabra "word"
@@ -208,7 +234,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["search",{"results_per_page":"20","page":"'.$page.'","category":"people","filters":{"scope":"all"},"string":"'.$word.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0];
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r;
 	}
 
 	#Devulve un array con los resultados de la busqueda de LUGARES usando la palabra "word"
@@ -217,7 +245,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["search",{"results_per_page":"20","page":"'.$page.'","category":"places","filters":{"scope":"all"},"string":"'.$word.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0];
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r;
 	}
 
 	#Devulve un array con los resultados de la busqueda de LUGARES usando la palabra "word"
@@ -226,7 +256,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["search",{"results_per_page":"20","page":"'.$page.'","category":"pages","filters":{"scope":"all"},"string":"'.$word.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp)[0];
+		$rp = json_decode($resp);
+		$r = $rp[0];
+		return $r;
 	}
 
 	#Envia una peticion de amistad con el mensaje indicado al usuario con el id indicado.
@@ -235,7 +267,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["sendFriendRequest",{"user_id":"'.$id.'","message":"'.$message.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp);
+		$rp = json_decode($resp);
+		$r = $rp;
+		return $r;
 	}
 
 	#Publica un comentario en el muro de un usuario con el id indicado
@@ -244,7 +278,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["addPostToProfileWall",{"user_id":"'.$id.'","body":"'.$message.'","legacy":"false"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp);
+		$rp = json_decode($resp);
+		$r = $rp;
+		return $r;
 	}
 
 	#Publica un comentario en el estado de un usuario. 
@@ -254,7 +290,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["addCommentToProfileWall",{"user_id":"'.$id.'","body":"'.$message.'", "post_id":"'.$statusID.'", "legacy":"false"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp);
+		$rp = json_decode($resp);
+		$r = $rp;
+		return $r;
 	}
 
 	#Da a me gusta a un estado. Se debe indicar el id del usuario al que pertenece el estado y el id del estado.
@@ -263,7 +301,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["likeWallPost",{"user_id":"'.$id.'","post_id":"'.$statusID.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp);
+		$rp = json_decode($resp);
+		$r = $rp;
+		return $r;
 	}
 
 	#Elimina un "me gusta" de un estado. Se debe indicar el id del usuario al que pertenece el estado y el id del estado.
@@ -272,7 +312,9 @@ class Tuenti
 	{
 		$data = '{"session_id":"'.$this->sid.'","version":"'.$this->version.'","requests":[["unlikeWallPost",{"user_id":"'.$id.'","post_id":"'.$statusID.'"}]]}';
 		$resp = $this->post($data);
-		return json_decode($resp);
+		$rp = json_decode($resp);
+		$r = $rp;
+		return $r;
 	}
 
 }
