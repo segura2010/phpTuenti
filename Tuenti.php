@@ -48,7 +48,7 @@ class Tuenti
     			'input_password' => $this->password,
     			'timestamp' => '1',
     			'timezone' => '1',
-    			'csfr' => '1ce77ff5'
+    			'csfr' => '1ce77ff5' // A veces cambian de orden los caracteres y no funciona.. XD
     		)
 		));
 
